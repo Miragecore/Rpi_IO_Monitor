@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import WebSocket
+from fastapi.responses import JSONResponse
 
 from fastapi.logger import logger
 
@@ -61,7 +62,7 @@ def machine_IO_Off():
 
 #button = Button(21)
 
-#button.when_pressed = machine_IO_on
+#button.when_pressed = machine_IO_On
 #button.when_released = machine_IO_Off
 
 app = FastAPI()
@@ -86,6 +87,10 @@ api_router = APIRouter()
 @app.get("/")
 def index(request: Request):
     return templates.TemplateResponse("index.html", context={"request": request})
+
+@app.get("/data")
+def json_data():
+    return JSONResponse(content=machine_info)
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
